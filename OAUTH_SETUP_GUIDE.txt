@@ -1,0 +1,97 @@
+OAUTH SETUP GUIDE - Google & GitHub Login
+==========================================
+
+Your .env file needs proper OAuth credentials. Here's what's missing:
+
+CURRENT STATUS:
+--------------
+✓ GOOGLE_CLIENT_ID: 649528107068-f9t7cus8eempfgpgb8eelvb3f75qg9cb.apps.googleusercontent.com
+✗ GOOGLE_CLIENT_SECRET: "your_google_client_secret" (NEEDS TO BE FILLED)
+✗ GITHUB_CLIENT_ID: "your_github_client_id" (NEEDS TO BE FILLED)
+✗ GITHUB_CLIENT_SECRET: "your_github_client_secret" (NEEDS TO BE FILLED)
+
+
+HOW TO GET GOOGLE OAUTH CREDENTIALS:
+====================================
+
+1. Go to: https://console.cloud.google.com/
+
+2. Select your project or create a new one
+
+3. Go to "APIs & Services" > "Credentials"
+
+4. Click "CREATE CREDENTIALS" > "OAuth 2.0 Client ID"
+
+5. Configure OAuth consent screen if not done:
+   - User Type: External
+   - App name: Odoo Hackathon 2026
+   - User support email: your email
+   - Developer contact: your email
+
+6. Create OAuth Client ID:
+   - Application type: Web application
+   - Name: Odoo Auth
+   - Authorized redirect URIs: http://localhost:8000/oauth/google/callback
+
+7. Copy the Client ID and Client Secret
+
+8. Update your .env file:
+   GOOGLE_CLIENT_ID=your_actual_client_id
+   GOOGLE_CLIENT_SECRET=your_actual_client_secret
+
+
+HOW TO GET GITHUB OAUTH CREDENTIALS:
+====================================
+
+1. Go to: https://github.com/settings/developers
+
+2. Click "New OAuth App"
+
+3. Fill in the details:
+   - Application name: Odoo Hackathon 2026
+   - Homepage URL: http://localhost:5173
+   - Authorization callback URL: http://localhost:8000/oauth/github/callback
+
+4. Click "Register application"
+
+5. Copy the Client ID
+
+6. Click "Generate a new client secret" and copy it
+
+7. Update your .env file:
+   GITHUB_CLIENT_ID=your_github_client_id
+   GITHUB_CLIENT_SECRET=your_github_client_secret
+
+
+AFTER UPDATING .ENV:
+===================
+
+1. Save the .env file
+
+2. Restart the backend server:
+   - Stop current server (Ctrl+C)
+   - Run: uvicorn app.main:app --reload
+
+3. Test Google/GitHub login from the frontend
+
+
+CURRENT .ENV LOCATION:
+=====================
+D:\Odoo\odoo-backend\.env
+
+
+WHAT I'VE FIXED:
+===============
+✓ Added SessionMiddleware to main.py (required for OAuth)
+✓ Fixed OAuth routes (removed duplicates)
+✓ Added proper error handling
+✓ OAuth will redirect to /login with tokens after success
+✓ Database cleared and ready for fresh signups
+
+
+OPTIONAL - IF YOU DON'T WANT OAUTH:
+===================================
+You can disable OAuth buttons in the frontend by commenting them out in:
+odoo-frontend/src/pages/Login.tsx
+
+Or just leave the credentials as-is and the buttons won't work (but won't break the app).
